@@ -339,7 +339,7 @@
 </head>
 
 <body>
-  <!-- 🎥 Video de fondo -->
+  <!-- Video de fondo -->
   <video id="bg-video" autoplay muted loop>
     <source src="Vídeo sin título ‐ Hecho con Clipchamp.mp4" type="video/mp4" />
     <source src="Vídeo sin título ‐ Hecho con Clipchamp (1).mp4" type="video/mp4" />
@@ -429,10 +429,7 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <h3>Registro de Torneos</h3>
-      <form id="form-torneo" action="https://formsubmit.co/mariomiguel0900@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="Nuevo registro de torneo">
-        <input type="hidden" name="_captcha" value="false">
-        
+      <form action="https://formsubmit.co/mariomiguel0900@gmail.com" method="POST" target="_blank">
         <input type="text" name="equipo" placeholder="Nombre del equipo" required />
         <input type="text" name="capitan" placeholder="Capitán" required />
         <input type="email" name="correo" placeholder="Correo de contacto" required />
@@ -442,19 +439,20 @@
           <option>Dota 2</option>
         </select>
         <textarea name="mensaje" placeholder="Mensaje adicional (opcional)"></textarea>
+        
+        <!-- FormSubmit extras -->
+        <input type="hidden" name="_subject" value="Nuevo registro de torneo en MIRACLE-MLBB.GG">
+        <input type="hidden" name="_captcha" value="false">
         <button type="submit">Enviar</button>
-      </form>           
+      </form>
     </div>
-  </div>
+  </div>  
 
   <div id="modal-servicio" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h3>Solicitar Servicio</h3>
-      <form id="form-servicio" action="https://formsubmit.co/mariomiguel0900@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="Nueva solicitud de servicio">
-        <input type="hidden" name="_captcha" value="false">
-      
+      <form action="https://formsubmit.co/mariomiguel0900@gmail.com" method="POST" target="_blank">
         <input type="text" name="nombre" placeholder="Nombre" required />
         <select name="servicio" required>
           <option value="">Selecciona servicio</option>
@@ -464,15 +462,19 @@
           <option>Streams</option>
         </select>
         <textarea name="mensaje" placeholder="Detalles adicionales (opcional)"></textarea>
+        
+        <!-- FormSubmit extras -->
+        <input type="hidden" name="_subject" value="Nueva solicitud de servicio en MIRACLE-MLBB.GG">
+        <input type="hidden" name="_captcha" value="false">
         <button type="submit">Enviar</button>
-      </form>          
+      </form>
     </div>
-  </div>
+  </div>  
 
-  <!-- 🧠 PIE DE PÁGINA -->
+  <!--  PIE DE PÁGINA -->
   <footer>
     <div class="footer-content">
-      <p>📧 mariomiguel0900@gmail.com</p>
+      <p>mariomiguel0900@gmail.com</p>
       <div class="social-icons">
         <a href="https://www.facebook.com/share/17mysNaKj4/" target="_blank">
           <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" />
@@ -539,7 +541,7 @@
       video.muted = !soundOn;
       soundBtn.textContent = soundOn ? "🔊 Desactivar sonido" : "🔇 Activar sonido";
     });
-    // --- 🔊 Reproducción secuencial de 3 audios locales en bucle ---
+    // --- Reproducción secuencial de 3 audios locales en bucle ---
 const audioFiles = [
   "Montagem Supersonic.mp3",
   "MONTAGEM RUGADA (Hardstyle Remix).mp3",

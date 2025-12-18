@@ -429,7 +429,10 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <h3>Registro de Torneos</h3>
-      <form id="form-torneo">
+      <form id="form-torneo" action="https://formsubmit.co/mariomiguel0900@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Nuevo registro de torneo">
+        <input type="hidden" name="_captcha" value="false">
+        
         <input type="text" name="equipo" placeholder="Nombre del equipo" required />
         <input type="text" name="capitan" placeholder="Capitán" required />
         <input type="email" name="correo" placeholder="Correo de contacto" required />
@@ -440,7 +443,7 @@
         </select>
         <textarea name="mensaje" placeholder="Mensaje adicional (opcional)"></textarea>
         <button type="submit">Enviar</button>
-      </form>      
+      </form>           
     </div>
   </div>
 
@@ -448,7 +451,10 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <h3>Solicitar Servicio</h3>
-      <form id="form-servicio">
+      <form id="form-servicio" action="https://formsubmit.co/mariomiguel0900@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Nueva solicitud de servicio">
+        <input type="hidden" name="_captcha" value="false">
+      
         <input type="text" name="nombre" placeholder="Nombre" required />
         <select name="servicio" required>
           <option value="">Selecciona servicio</option>
@@ -459,7 +465,7 @@
         </select>
         <textarea name="mensaje" placeholder="Detalles adicionales (opcional)"></textarea>
         <button type="submit">Enviar</button>
-      </form>      
+      </form>          
     </div>
   </div>
 

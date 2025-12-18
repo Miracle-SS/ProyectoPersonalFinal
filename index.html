@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MIRACLE-MLBB.GG</title>
+
+  <style>
+    /* --- Fondo con video --- */
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+      cursor: url('https://cur.cursors-4u.net/food/foo-3/foo255.cur'), auto;
+    }
+
+    video#bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.65;
+    }
+
+    /* --- Encabezado RGB --- */
+     header {
+      padding: 40px 10px;
+      background: linear-gradient(
+        90deg,
+        rgba(0, 255, 255, 0.3),
+        rgba(255, 0, 255, 0.3),
+        rgba(0, 255, 255, 0.3)
+      );
+      background-size: 400% 400%;
+      animation: rgbFlow 8s ease infinite;
+      position: relative;
+      z-index: 2;
+      backdrop-filter: blur(4px);
+    }
+
+    @keyframes rgbFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .rgb-title {
+      font-size: 2.5rem;
+      text-shadow: 0 0 15px #00ffff, 0 0 25px #ff00ff;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    /* --- Botón de sonido --- */
+    #toggle-sound {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(90deg, #00ffff, #ff00ff);
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffff;
+      font-weight: bold;
+      z-index: 3;
+    }
+
+    #toggle-sound:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #ff00ff;
+    }
+
+    /* --- Navegación --- */
+    .nav-buttons {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav-btn {
+      border: none;
+      border-radius: 50%;
+      padding: 15px;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00ffff;
+      transition: all 0.3s;
+    }
+
+    .nav-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px #ff00ff;
+    }
+
+    .nav-btn.active {
+      background: #fff;
+      color: #000;
+      box-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
+    }
+
+    /* --- Secciones (pestañas) --- */
+    .tab-content {
+      display: none;
+      padding: 60px 20px;
+      animation: fadeIn 0.6s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .action-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: linear-gradient(90deg, #00ffff, #ff00ff);
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 25px;
+      box-shadow: 0 0 15px #ff00ff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .action-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #00ffff;
+    }
+
+    .placeholder {
+      color: #ff00ff;
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    /* --- Modales --- */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: rgba(17, 17, 17, 0.95);
+      border: 2px solid #ff00ff;
+      padding: 20px;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px #00ffff;
+      animation: modalPop 0.4s ease;
+    }
+
+    @keyframes modalPop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #ff00ff;
+    }
+
+    /* --- Formularios --- */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    input, select, textarea {
+      background: #222;
+      border: 1px solid #00ffff;
+      border-radius: 8px;
+      color: #fff;
+      padding: 8px;
+      outline: none;
+      font-family: "Poppins", sans-serif;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #ff00ff;
+      box-shadow: 0 0 10px #ff00ff;
+    }
+
+    button[type="submit"] {
+      background: linear-gradient(90deg, #00ffff, #ff00ff);
+      border: none;
+      color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ffff;
+    }
+
+    /* --- PIE DE PÁGINA --- */
+    footer {
+      background: linear-gradient(
+        90deg,
+        rgba(0, 255, 255, 0.3),
+        rgba(255, 0, 255, 0.3),
+        rgba(0, 255, 255, 0.3)
+      );
+      background-size: 400% 400%;
+      animation: rgbFlow 8s ease infinite;
+      backdrop-filter: blur(4px);
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 12px 10px;
+      color: #fff;
+      text-align: center;
+      font-size: 0.9rem;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-content p {
+      margin: 0;
+      text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff;
+      font-weight: 500;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-icons a img {
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 0 6px #ff00ff);
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .social-icons a:hover img {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 10px #00ffff);
+    }
+    .split-section {
+  display: flex;
+  justify-content: space-between; /* separa texto y video */
+  align-items: center; /* centra verticalmente */
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.split-text {
+  flex: 0 1 50%; /* ocupa ~45% de la sección, a la izquierda */
+  min-width: 280px;
+  text-align: left;
+}
+
+.split-video video {
+  width: 100%;
+  max-width: 500px; /* limita el ancho máximo */
+  height: auto;     /* mantiene la proporción */
+  border-radius: 15px;
+  box-shadow: 0 0 45px #ff00ff;
+}
+#admin-login {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: linear-gradient(90deg, #ffdd00, #ffaa00);
+  border: none;
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 10px #ffaa00;
+  z-index: 3;
+}
+
+#admin-login:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #ffdd00;
+}
+  </style>
+</head>
+
+<body>
+  <!-- 🎥 Video de fondo -->
+  <video id="bg-video" autoplay muted loop>
+    <source src="Vídeo sin título ‐ Hecho con Clipchamp.mp4" type="video/mp4" />
+    <source src="Vídeo sin título ‐ Hecho con Clipchamp (1).mp4" type="video/mp4" />
+  </video>  
+
+  <header>
+    <button id="admin-login">Log-in Admin</button>
+    <button id="toggle-sound">🔇 Activar sonido</button>
+    <h1 class="rgb-title">BLAST · THE BEST PLAY</h1>
+  </header> 
+
+  <nav class="nav-buttons">
+    <button class="nav-btn active" data-tab="MLBB">MLBB</button>
+    <button class="nav-btn" data-tab="Dota 2">Dota 2</button>
+    <button class="nav-btn" data-tab="torneos">Torneos</button>
+    <button class="nav-btn" data-tab="servicios">Servicios</button>
+  </nav>
+
+  <!-- Secciones -->
+  <!-- MLBB -->
+<section id="MLBB" class="tab-content active">
+  <div class="split-section">
+    <div class="split-text">
+      <h2>               MLBB</h2>
+      <p>       Me especializo en los roles de GoldLaner · Jungler · MidLaner, pero juego chill cualquier rol. Inicié en el juego hace alrededor
+        de 4 años, después del primer año conocí al que sería hasta ahora el líder del equipo en el que juego: "The Best Play", quién me integraría al equipo
+        que él ya había armado, y así empezamos a jugar torneos, mejorando poco a pcoo, y casa vez consiguiendo más, todo esto mientras descuidaba 
+        mis estudios de 1ro y 2do de secundaria. Pero actualmente pienso que fue una buena suerte haber y estar con ese equipo. 
+      </p>
+    </div>
+    <div class="split-video">
+      <iframe width="100%" height="315" 
+        src="https://www.youtube.com/embed/vpNtCanHvgQ?autoplay=1&mute=1&loop=1&playlist=vpNtCanHvgQ" 
+        title="Video MLBB" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+      </iframe>
+    </div>    
+  </div>
+</section>
+
+<!-- DOTA -->
+<section id="Dota 2" class="tab-content">
+  <div class="split-section">
+    <div class="split-text">
+      <h2>Dota (por diversión)</h2>
+      <p>Juego Dota por diversión — si quieres nos echamos unas partidas en VIVOO.</p>
+    </div>
+    <div class="split-video">
+      <iframe width="100%" height="315" 
+        src="https://www.youtube.com/embed/GEVGm-Xjl60?autoplay=1&mute=1&loop=1&playlist=GEVGm-Xjl60" 
+        title="Video Dota" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+      </iframe>
+    </div>    
+  </div>
+</section>
+
+  <section id="torneos" class="tab-content">
+    <h2>Torneos</h2>
+    <p>Regístrate para participar en próximos torneos.</p>
+    <button class="action-btn" data-modal="registro">Registrar Participación</button>
+  </section>
+
+  <section id="servicios" class="tab-content">
+    <h2>Servicios</h2>
+    <ul>
+      <p>Boosting</p>
+      <p>Coaching</p>
+      <p>Torneos</p>
+      <p>Streams</p>
+    </ul>
+    <button class="action-btn" data-modal="servicio">Solicitar Servicio</button>
+  </section>
+
+  <!-- Modales -->
+  <div id="modal-login" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Iniciar Sesión</h3>
+      <form>
+        <input type="text" placeholder="Usuario" required />
+        <input type="password" placeholder="Contraseña" required />
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-registro" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Registro de Torneos</h3>
+      <form id="form-torneo">
+        <input type="text" name="equipo" placeholder="Nombre del equipo" required />
+        <input type="text" name="capitan" placeholder="Capitán" required />
+        <input type="email" name="correo" placeholder="Correo de contacto" required />
+        <select name="juego" required>
+          <option value="">Selecciona juego</option>
+          <option>MLBB</option>
+          <option>Dota 2</option>
+        </select>
+        <textarea name="mensaje" placeholder="Mensaje adicional (opcional)"></textarea>
+        <button type="submit">Enviar</button>
+      </form>      
+    </div>
+  </div>
+
+  <div id="modal-servicio" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Solicitar Servicio</h3>
+      <form id="form-servicio">
+        <input type="text" name="nombre" placeholder="Nombre" required />
+        <select name="servicio" required>
+          <option value="">Selecciona servicio</option>
+          <option>Boosting</option>
+          <option>Coaching</option>
+          <option>Torneos</option>
+          <option>Streams</option>
+        </select>
+        <textarea name="mensaje" placeholder="Detalles adicionales (opcional)"></textarea>
+        <button type="submit">Enviar</button>
+      </form>      
+    </div>
+  </div>
+
+  <!-- 🧠 PIE DE PÁGINA -->
+  <footer>
+    <div class="footer-content">
+      <p>📧 mariomiguel0900@gmail.com</p>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/share/17mysNaKj4/" target="_blank">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" />
+        </a>
+        <a href="https://www.instagram.com/mario.pandia" target="_blank">
+          <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" />
+        </a>
+        <a href="https://www.tiktok.com/@blazzzt_?is_from_webapp=1&sender_device=pc" target="_blank">
+          <img src="https://cdn-icons-png.flaticon.com/512/3046/3046120.png" alt="TikTok" />
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // --- Tabs ---
+    const navBtns = document.querySelectorAll(".nav-btn");
+    const tabs = document.querySelectorAll(".tab-content");
+    navBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.tab;
+        navBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        tabs.forEach(tab => {
+          tab.classList.remove("active");
+          if (tab.id === target) tab.classList.add("active");
+        });
+      });
+    });
+
+    // --- Modales ---
+    const modals = {
+      login: document.getElementById("modal-login"),
+      registro: document.getElementById("modal-registro"),
+      servicio: document.getElementById("modal-servicio")
+    };
+
+    document.querySelectorAll(".action-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const modalId = btn.dataset.modal;
+        modals[modalId].style.display = "flex";
+      });
+    });
+
+    document.querySelectorAll(".close").forEach(c => {
+      c.addEventListener("click", () => {
+        c.parentElement.parentElement.style.display = "none";
+      });
+    });
+
+    window.addEventListener("click", e => {
+      Object.values(modals).forEach(modal => {
+        if (e.target === modal) modal.style.display = "none";
+      });
+    });
+
+    // --- Control del sonido ---
+    const video = document.getElementById("bg-video");
+    const soundBtn = document.getElementById("toggle-sound");
+    let soundOn = false;
+
+    soundBtn.addEventListener("click", () => {
+      soundOn = !soundOn;
+      video.muted = !soundOn;
+      soundBtn.textContent = soundOn ? "🔊 Desactivar sonido" : "🔇 Activar sonido";
+    });
+    // --- 🔊 Reproducción secuencial de 3 audios locales en bucle ---
+const audioFiles = [
+  "Montagem Supersonic.mp3",
+  "MONTAGEM RUGADA (Hardstyle Remix).mp3",
+  "MONTAGEM NADA [40l8q9d2jVQ].mp3"
+];
+
+let currentAudioIndex = 0;
+let currentAudio = new Audio(audioFiles[currentAudioIndex]);
+let soundEnabled = false;
+
+// al terminar un audio, pasa al siguiente
+currentAudio.addEventListener("ended", () => {
+  currentAudioIndex = (currentAudioIndex + 1) % audioFiles.length;
+  currentAudio = new Audio(audioFiles[currentAudioIndex]);
+  if (soundEnabled) {
+    currentAudio.play();
+  }
+  currentAudio.addEventListener("ended", () => {
+    currentAudioIndex = (currentAudioIndex + 1) % audioFiles.length;
+    currentAudio = new Audio(audioFiles[currentAudioIndex]);
+    if (soundEnabled) currentAudio.play();
+  });
+});
+
+// sobreescribir comportamiento del botón sin tocar el resto del sitio
+soundBtn.addEventListener("click", () => {
+  soundEnabled = !soundEnabled;
+  video.muted = true; // el video nunca suena
+  soundBtn.textContent = soundEnabled ? "🔊 Desactivar sonido" : "🔇 Activar sonido";
+
+  if (soundEnabled) {
+    currentAudio.play();
+  } else {
+    currentAudio.pause();
+  }
+});
+const adminBtn = document.getElementById("admin-login");
+
+adminBtn.addEventListener("click", async () => {
+  const user = prompt("Usuario:");
+  const pass = prompt("Contraseña:");
+
+  const authorizedUser = "admin";
+  const authorizedPass = "MiContra";
+
+  if (user === authorizedUser && pass === authorizedPass) {
+    try {
+      // Pedimos los registros al backend
+      const resTorneos = await fetch("/registros-torneos");
+      const torneos = await resTorneos.json();
+
+      const resServicios = await fetch("/registros-servicios");
+      const servicios = await resServicios.json();
+
+      // Mostramos los registros
+      let output = "📋 TORNEOS:\n";
+      torneos.forEach(t => {
+        output += `Equipo: ${t.equipo}, Capitán: ${t.capitan}, Juego: ${t.juego}, Correo: ${t.correo}\n`;
+      });
+
+      output += "\n📋 SERVICIOS:\n";
+      servicios.forEach(s => {
+        output += `Nombre: ${s.nombre}, Servicio: ${s.servicio}, Mensaje: ${s.mensaje}\n`;
+      });
+
+      alert(output);
+
+    } catch (err) {
+      console.error(err);
+      alert("Error al cargar los registros.");
+    }
+  } else {
+    alert("Acceso denegado. Credenciales incorrectas.");
+  }
+});
+// Torneos
+document.getElementById("form-torneo").addEventListener("submit", async e => {
+  e.preventDefault();
+  const form = e.target;
+  const data = Object.fromEntries(new FormData(form));
+  const res = await fetch("/registrar-torneo", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+  const json = await res.json();
+  alert(json.message);
+  form.reset();
+});
+
+// Servicios
+document.getElementById("form-servicio").addEventListener("submit", async e => {
+  e.preventDefault();
+  const form = e.target;
+  const data = Object.fromEntries(new FormData(form));
+  const res = await fetch("/registrar-servicio", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+  const json = await res.json();
+  alert(json.message);
+  form.reset();
+});
+  </script>
+</body>
+</html>
